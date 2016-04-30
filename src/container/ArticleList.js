@@ -1,11 +1,14 @@
 import React, {
     Component,
     StyleSheet,
-
     View,
     ListView,
     Text
 } from 'react-native'
+
+import { Card } from 'react-native-material-design'
+
+import Icons from 'react-native-vector-icons/FontAwesome'
 
 import storage from '../common/storage'
 import { ARTICLE_KEY, ARTICLE_IDS_KEY } from '../common/storage'
@@ -94,31 +97,48 @@ class ArticleList extends Component {
     }
 
     renderLoadingView() {
+        const LOADING_TIP = 'is loading from network'
         return (
-            <View>
-                <Text>
-                    is loading from network
-                </Text>
-            </View>
+            <Card>
+                <Card.Body>
+                    <Text>
+                        {LOADING_TIP}
+                    </Text>
+                </Card.Body>
+            </Card>
         )
     }
 
     renderArticleInfo(articleInfo) {
+        console.log(articleInfo.date)
         return (
-            <View>
-                <Text>
-                    {articleInfo.title}
-                </Text>
-                <Text>
-                    {articleInfo.date}
-                </Text>
-                <Text>
-                    {articleInfo.shareNumber}
-                </Text>
-                <Text>
-                    {articleInfo.loveNumber}
-                </Text>
-            </View>
+             <Card>
+                <Card.Body>
+                    <Text style={styles.itemTitle}>
+                        {articleInfo.title}
+                    </Text>
+                    <View style={styles.ItemIconWrapper}>
+                        <View style={styles.loveShareIcons}>
+                            <Icons name="heart" style={styles.itemIcon}>
+
+                            </Icons>
+                            <Text style={styles.iconText}>
+                                {articleInfo.loveNumber}
+                            </Text>
+                            <Icons name="share-alt"  style={styles.itemIcon}>
+                            </Icons>
+                            <Text>
+                                {articleInfo.shareNumber}
+                            </Text>
+                        </View>
+                        <Icons name="calendar" style={styles.itemIcon}>
+                            <Text>
+                                {articleInfo.date}
+                            </Text>
+                        </Icons>
+                    </View>
+                </Card.Body>
+            </Card>
         )
     }
 }
@@ -127,9 +147,26 @@ const styles = StyleSheet.create({
     normal: {
         flex: 1
     },
-    loadMoreButton: {
-        flex: 1
+
+    itemTitle: {
+        fontSize: 18,
+        padding: 10
+    },
+
+    ItemIconWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    loveShareIcons: {
+        flexDirection: 'row'
+    },
+    itemIcon: {
+        flexDirection: 'row'
+    },
+    iconText: {
+        padding: 10
     }
+
 })
 
 function getArticleInfo(article) {

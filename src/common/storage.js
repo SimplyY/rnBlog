@@ -4,6 +4,8 @@ import Storage from 'react-native-storage'
 import { isArray } from '../util/judge'
 import { ARTICLES_API } from './api'
 
+import { formatArticleDate } from '../util/data'
+
 export const ARTICLE_KEY = 'article'
 export const ARTICLE_IDS_KEY = 'articleIds'
 
@@ -14,7 +16,6 @@ const storage = new Storage({
     // expire time, default 1 day(1000 * 3600 * 24 secs)
     defaultExpires: 1000 * 3600 * 24,
 
-    // cache data in the memory. default is true.
     enableCache: true,
 
     // if data was not found in storage or expired,
@@ -51,20 +52,12 @@ const storage = new Storage({
                     if (isArray(id)) {
                         // 当id 为数组ids，同步多个 article
                         articles.forEach(article => {
-                            storage.save({
-                                id: article._id,
-                                key: ARTICLE_KEY,
-                                rawData: article
-                            })
+                            saveArticle(article)
                         })
                     } else {
                         // 否则同步一个 article
                         const article = articles
-                        storage.save({
-                            id,
-                            key: ARTICLE_KEY,
-                            rawData: article
-                        })
+                        saveArticle(article)
                     }
                     resolve(articles)
                 })
@@ -74,6 +67,15 @@ const storage = new Storage({
         }
     }
 })
+
+function saveArticle(article) {
+    article.date = formatArticleDate(article.date)
+    storage.save({
+        key: ARTICLE_KEY,
+        id: article._id,
+        rawData: article
+    })
+}
 
 
 export default storage

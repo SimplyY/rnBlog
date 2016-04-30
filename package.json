@@ -10,6 +10,7 @@
     "react": "^0.14.8",
     "react-native": "^0.24.1",
     "react-native-markdown": "^0.1.1",
+    "react-native-material-design": "^0.3.3",
     "react-native-material-kit": "^0.3.1",
     "react-native-router-flux": "^3.22.22",
     "react-native-storage": "0.0.16",
