@@ -2,21 +2,25 @@ import React, {
     Component,
     StyleSheet,
     View,
+    TouchableOpacity,
     ListView,
-    Text
+    Text,
+    Navigator
 } from 'react-native'
 
 import { Card } from 'react-native-material-design'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 
+import MyToolBar from '../component/MyToolBar'
+
 import storage from '../common/storage'
 import { ARTICLE_KEY, ARTICLE_IDS_KEY } from '../common/storage'
 
-import { color } from '../common/const'
+import { COLOR, ROUTE_ID, TITLE } from '../common/const'
 
 const FIRST_MAX_ARTICLES_LEN = 10
-const LOAD_MORE_LEN_ONCE = 8
+const LOAD_MORE_LEN_ONCE = 5
 
 const END_REACHED_THRESHOLD = 30
 
@@ -80,26 +84,42 @@ class ArticleList extends Component {
         )
     }
 
+    gotoArticlePage(rowID) {
+        if (typeof rowID === 'string') {
+            rowID = parseInt(rowID)
+        }
+        const theArticleId = this.state.articleListInfo[rowID].id
+
+        this.props.navigator.push({
+            id: ROUTE_ID.article,
+            data: theArticleId,
+        })
+    }
 
     render() {
-        if (!this.hasFirstLoad()) {
-            return this.renderLoadingView()
-        }
+        return (
+            <Navigator
+                navigator={this.props.navigator}
+                renderScene={this.renderScene.bind(this)}
+                />
+        )
+    }
 
-        this.dataSource = this.dataSource.cloneWithRows(this.state.articleListInfo)
+    renderScene() {
+        const body = this.hasFirstLoad() ?
+            this.renderArticleList():
+            this.renderLoadingView()
 
         return (
-            <ListView
-                dataSource={this.dataSource}
-                renderRow={this.renderArticleInfo}
-                onEndReached={this.loadMoreArticles.bind(this)}
-                onEndReachedThreshold={END_REACHED_THRESHOLD}>
-            </ListView>
+            <MyToolBar title={TITLE.articleList}>
+                {body}
+            </MyToolBar>
         )
     }
 
     renderLoadingView() {
         const LOADING_TIP = 'article list is loading'
+
         return (
             <Card>
                 <Card.Body>
@@ -111,49 +131,69 @@ class ArticleList extends Component {
         )
     }
 
-    renderArticleInfo(articleInfo) {
-        console.log(articleInfo.date)
+    renderArticleList() {
+        this.dataSource = this.dataSource.cloneWithRows(this.state.articleListInfo)
+
         return (
-             <Card elevation={3}>
-                <Card.Body>
-                    <Text style={styles.itemTitle}>
-                        {articleInfo.title}
-                    </Text>
+            <ListView
+                style={styles.listView}
+                dataSource={this.dataSource}
+                renderRow={this.renderArticleInfo.bind(this)}
+                onEndReached={this.loadMoreArticles.bind(this)}
+                onEndReachedThreshold={END_REACHED_THRESHOLD}>
+            </ListView>
+        )
+    }
 
-                    <View style={styles.ItemIconWrapper}>
-                        <View style={styles.loveShareIcon}>
-                            <Icon
-                                name="heart"
-                                color={color.grey}
-                                style={styles.itemIcon} />
-                            <Text style={styles.iconText}>
-                                {articleInfo.loveNumber}
-                            </Text>
-                            <Icon
-                                size={13.5}
-                                name="share-alt"
-                                color={color.grey} style={styles.itemIcon} />
-                            <Text style={styles.iconText}>
-                                {articleInfo.shareNumber}
-                            </Text>
-                        </View>
-
-                        <Icon color={color.deepGrey} name="calendar" style={styles.itemIcon} />
-                        <Text style={styles.iconText}>
-                            {articleInfo.date}
+    renderArticleInfo(articleInfo, sectionId, rowID) {
+        return (
+            <TouchableOpacity onPress={() => this.gotoArticlePage(rowID)}>
+                <Card elevation={3}>
+                    <Card.Body>
+                        <Text style={styles.itemTitle}>
+                           {articleInfo.title}
                         </Text>
-                    </View>
-                </Card.Body>
-            </Card>
+
+                        <View style={styles.ItemIconWrapper}>
+                            <View style={styles.loveShareIcon}>
+                                <Icon
+                                    name="heart"
+                                    color={COLOR.grey}
+                                    style={styles.itemIcon} />
+                                <Text style={styles.iconText}>
+                                    {articleInfo.loveNumber}
+                                </Text>
+                                <Icon
+                                    size={13.5}
+                                    name="share-alt"
+                                    color={COLOR.grey} style={styles.itemIcon} />
+                                <Text style={styles.iconText}>
+                                    {articleInfo.shareNumber}
+                                </Text>
+                            </View>
+
+                            <Icon color={COLOR.deepGrey} name="calendar" style={styles.itemIcon} />
+                            <Text style={styles.iconText}>
+                                {articleInfo.date}
+                            </Text>
+                       </View>
+                   </Card.Body>
+               </Card>
+            </TouchableOpacity>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    listView: {
+        flex: 1,
+        padding: 10,
+    },
+
     itemTitle: {
         fontSize: 18,
         padding: 6,
-        color: color.lightBlack
+        color: COLOR.lightBlack
     },
 
     ItemIconWrapper: {
@@ -172,13 +212,14 @@ const styles = StyleSheet.create({
     },
     iconText: {
         paddingHorizontal: 4,
-        color: color.grey,
+        color: COLOR.grey,
     }
 
 })
 
 function getArticleInfo(article) {
     return {
+        id: article._id,
         title: article.title,
         date: article.date,
         shareNumber: article.shareNumber,

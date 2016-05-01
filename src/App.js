@@ -1,10 +1,14 @@
+/* global __DEV__, GLOBAL */
+
 import React, {
-    Component
+    Component,
+    Navigator
 } from 'react-native'
 
-import {Scene, Router, Modal} from 'react-native-router-flux'
-
 import ArticleList from './container/ArticleList'
+import Article from './container/Article'
+
+import { ROUTE_ID } from './common/const'
 
 // dev config
 if (__DEV__) {
@@ -16,12 +20,25 @@ class App extends Component {
 
     render() {
         return (
-            <Router>
-                <Scene key="modal" component={Modal} >
-                    <Scene key="ArticleList" component={ArticleList} title="ArticleList" initial={true} />
-                </Scene>
-            </Router>
+            <Navigator
+                initialRoute={{id: ROUTE_ID.articleList}}
+                renderScene={this.renderScene.bind(this)}
+                configureScene={() => Navigator.SceneConfigs.HorizontalSwipeJump}
+                />
         )
+    }
+
+    renderScene(route, navigator) {
+        const routeId = route.id
+
+        switch (routeId) {
+            case ROUTE_ID.articleList:
+                return <ArticleList navigator={navigator} />
+            case ROUTE_ID.article:
+                return <Article navigator={navigator} articleId={route.data}/>
+            default:
+                return <ArticleList navigator={navigator} />
+        }
     }
 }
 
