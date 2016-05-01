@@ -8,10 +8,12 @@ import React, {
 
 import { Card } from 'react-native-material-design'
 
-import Icons from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 import storage from '../common/storage'
 import { ARTICLE_KEY, ARTICLE_IDS_KEY } from '../common/storage'
+
+import { color } from '../common/const'
 
 const FIRST_MAX_ARTICLES_LEN = 10
 const LOAD_MORE_LEN_ONCE = 8
@@ -97,7 +99,7 @@ class ArticleList extends Component {
     }
 
     renderLoadingView() {
-        const LOADING_TIP = 'is loading from network'
+        const LOADING_TIP = 'article list is loading'
         return (
             <Card>
                 <Card.Body>
@@ -112,30 +114,34 @@ class ArticleList extends Component {
     renderArticleInfo(articleInfo) {
         console.log(articleInfo.date)
         return (
-             <Card>
+             <Card elevation={3}>
                 <Card.Body>
                     <Text style={styles.itemTitle}>
                         {articleInfo.title}
                     </Text>
-                    <View style={styles.ItemIconWrapper}>
-                        <View style={styles.loveShareIcons}>
-                            <Icons name="heart" style={styles.itemIcon}>
 
-                            </Icons>
+                    <View style={styles.ItemIconWrapper}>
+                        <View style={styles.loveShareIcon}>
+                            <Icon
+                                name="heart"
+                                color={color.grey}
+                                style={styles.itemIcon} />
                             <Text style={styles.iconText}>
                                 {articleInfo.loveNumber}
                             </Text>
-                            <Icons name="share-alt"  style={styles.itemIcon}>
-                            </Icons>
-                            <Text>
+                            <Icon
+                                size={13.5}
+                                name="share-alt"
+                                color={color.grey} style={styles.itemIcon} />
+                            <Text style={styles.iconText}>
                                 {articleInfo.shareNumber}
                             </Text>
                         </View>
-                        <Icons name="calendar" style={styles.itemIcon}>
-                            <Text>
-                                {articleInfo.date}
-                            </Text>
-                        </Icons>
+
+                        <Icon color={color.deepGrey} name="calendar" style={styles.itemIcon} />
+                        <Text style={styles.iconText}>
+                            {articleInfo.date}
+                        </Text>
                     </View>
                 </Card.Body>
             </Card>
@@ -144,27 +150,29 @@ class ArticleList extends Component {
 }
 
 const styles = StyleSheet.create({
-    normal: {
-        flex: 1
-    },
-
     itemTitle: {
         fontSize: 18,
-        padding: 10
+        padding: 6,
+        color: color.lightBlack
     },
 
     ItemIconWrapper: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        alignItems: 'center',
     },
-    loveShareIcons: {
-        flexDirection: 'row'
+    loveShareIcon: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     itemIcon: {
-        flexDirection: 'row'
+        marginHorizontal: 2,
+        paddingHorizontal: 2,
+        flexDirection: 'row',
     },
     iconText: {
-        padding: 10
+        paddingHorizontal: 4,
+        color: color.grey,
     }
 
 })
