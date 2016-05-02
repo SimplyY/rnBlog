@@ -2,7 +2,8 @@ import React, {
     Component,
     StyleSheet,
     View,
-    ToolbarAndroid
+    ToolbarAndroid,
+    StatusBar
 } from 'react-native'
 
 import { COLOR } from '../common/const'
@@ -11,6 +12,10 @@ class MyToolBar extends Component {
     render() {
         return (
             <View style={styles.pageContainer}>
+                <StatusBar
+                    backgroundColor={COLOR.litteBlack}
+                    barStyle="light-content"
+                    />
                 <ToolbarAndroid
                     style={styles.toolbar}
                     title={this.props.title}
