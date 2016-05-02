@@ -22,7 +22,7 @@ import { COLOR, ROUTE_ID, TITLE } from '../common/const'
 const FIRST_MAX_ARTICLES_LEN = 10
 const LOAD_MORE_LEN_ONCE = 3
 
-const END_REACHED_THRESHOLD = 50
+const END_REACHED_THRESHOLD = 150
 
 class ArticleList extends Component {
     constructor(props) {

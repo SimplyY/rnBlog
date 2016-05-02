@@ -135,6 +135,10 @@ var htmlToElement = function (rawHtml, opts, done) {
                     var codeText = '';
 
                     node.children.forEach(function (code) {
+                        while(code.text === undefined) {
+                            code = code.children[0]
+                        }
+
                         codeText = codeText + code.text;
                     });
                     return (
@@ -225,16 +229,13 @@ HtmlView.propTypes = {
     renderNode: PropTypes.func
 }
 
-var fontSize = 16
-var titleMargin = 15
-var liFontSize = fontSize - 2
+var fontSize = 14
+var titleMargin = 10
+var liFontSize = fontSize - 1
+
+var codeColor = '#E74C3C'
 
 var baseStyles = StyleSheet.create({
-    img: {
-        width: width - 30,
-        height: height * 2/5,
-    	resizeMode: Image.resizeMode.contain,
-    },
     // imgWrapper: {
     //     flex: 1,
     //     flexDirection: 'row'
@@ -268,7 +269,7 @@ var baseStyles = StyleSheet.create({
         color: 'rgba(0,0,0,0.8)'
     },
     h1wrapper: {
-        marginTop: titleMargin,
+        marginTop: titleMargin + 20,
         marginBottom: titleMargin
     },
     h2: {
@@ -321,7 +322,7 @@ var baseStyles = StyleSheet.create({
         color: 'rgba(0,0,0,0.7)'
     },
     liwrapper: {
-        paddingLeft: 20,
+        paddingLeft: 10,
         marginBottom: 10
     },
     strong: {
@@ -331,11 +332,10 @@ var baseStyles = StyleSheet.create({
         fontStyle: 'italic'
     },
     code: {
-        color: '#E74C3C',
+        color: codeColor,
         paddingLeft: 5,
         paddingRight: 5,
-        fontFamily: 'Courier'
-
+        fontFamily: 'Courier',
     },
     codeScrollView: {
         //paddingBottom: 15,
@@ -344,7 +344,7 @@ var baseStyles = StyleSheet.create({
         //paddingTop: 15,
         backgroundColor: '#333',
         flexDirection: 'column',
-        marginBottom: 15
+        marginBottom: 10
     },
     codeRow: {
         flex: 1,
@@ -366,22 +366,22 @@ var baseStyles = StyleSheet.create({
         paddingTop: 20
     },
     lineNum: {
-        width: 55,
+        width: 30,
         color: 'rgba(255,255,255,0.5)',
         //backgroundColor: 'rgba(29,29,29,1)',
         //height: 25
     },
     lineNumWrapper: {
-        width: 55,
+        width: 30,
         height: 25,
         backgroundColor: 'rgba(0,0,0,0.1)',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingLeft: 20,
+        paddingLeft: 10,
         //paddingTop: 20
     },
     codeLine: {
-        color: '#E74C3C',
+        color: codeColor,
         fontFamily: 'Courier'
     },
     codeWrapper: {

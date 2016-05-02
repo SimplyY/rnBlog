@@ -21,6 +21,8 @@ import { ARTICLE_KEY } from '../common/storage'
 
 import { TITLE } from '../common/const'
 
+const LAZY_LOAD_DELAY = 400
+
 class Article extends Component {
     constructor(props) {
         super(props)
@@ -37,8 +39,6 @@ class Article extends Component {
             id: this.props.articleId
         })
         .then(article => {
-            const LAZY_LOAD_DELAY = 300
-
             const setTimeout = typeof setTimeout === 'function' ?
                 setTimeout:
                 this.setTimeout
@@ -129,15 +129,15 @@ class Article extends Component {
 const {height,width} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
-    article: {
-        padding: 20
-    },
-
     img: {
         width: width - 30,
         height: height * 2/5,
         resizeMode: Image.resizeMode.contain,
     },
+    article: {
+        paddingHorizontal: 20,
+    },
+
 })
 
 export default Article

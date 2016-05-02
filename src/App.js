@@ -2,13 +2,17 @@
 
 import React, {
     Component,
-    Navigator
+    Navigator,
+    BackAndroid
 } from 'react-native'
 
 import ArticleList from './container/ArticleList'
 import Article from './container/Article'
 
 import { ROUTE_ID } from './common/const'
+
+import { ToastAndroid } from 'react-native'
+
 
 // dev config
 if (__DEV__) {
@@ -17,6 +21,12 @@ if (__DEV__) {
 }
 
 class App extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.hasListenBackButton = false
+    }
 
     render() {
         return (
@@ -29,6 +39,11 @@ class App extends Component {
     }
 
     renderScene(route, navigator) {
+        if (!this.hasListenBackButton) {
+            this.backButtonListener(navigator)
+            this.hasListenBackButton = true
+        }
+
         const routeId = route.id
 
         switch (routeId) {
@@ -39,6 +54,17 @@ class App extends Component {
             default:
                 return <ArticleList navigator={navigator} />
         }
+    }
+
+    backButtonListener(navigator) {
+        BackAndroid.addEventListener('hardwareBackPress', function() {
+            if (navigator.getCurrentRoutes().length > 1) {
+                navigator.pop()
+                // return true to stop exit app
+                return true
+            }
+            return false
+        })
     }
 }
 
