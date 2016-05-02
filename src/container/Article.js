@@ -22,7 +22,7 @@ import { ARTICLE_KEY } from '../common/storage'
 
 import { TITLE } from '../common/const'
 
-const LAZY_LOAD_DELAY = 300
+const LAZY_LOAD_DELAY = 370
 
 class Article extends Component {
     constructor(props) {
@@ -119,7 +119,7 @@ class Article extends Component {
     renderLoadingView() {
         return (
             <View style={styles.container}>
-                <Text>
+                <Text style={styles.loadingText}>
                     Loading article...
                 </Text>
             </View>
@@ -130,6 +130,12 @@ class Article extends Component {
 const {height,width} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+    loadingText: {
+        fontSize: 20,
+        marginTop: 20,
+        marginLeft: 10
+    },
+
     img: {
         width: width - 30,
         height: height * 2/5,
