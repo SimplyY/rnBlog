@@ -22,7 +22,7 @@ import { ARTICLE_KEY } from '../common/storage'
 
 import { TITLE } from '../common/const'
 
-const LAZY_LOAD_DELAY = 400
+const LAZY_LOAD_DELAY = 300
 
 class Article extends Component {
     constructor(props) {
