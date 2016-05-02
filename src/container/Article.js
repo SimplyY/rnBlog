@@ -6,7 +6,8 @@ import React, {
     Image,
     ScrollView,
     Navigator,
-    Dimensions
+    Dimensions,
+    Linking
 } from 'react-native'
 
 import reactMixin from 'react-mixin'
@@ -49,8 +50,8 @@ class Article extends Component {
         })
     }
 
-    _onLinkPress() {
-        // TODO
+    _onLinkPress(uri) {
+        Linking.openURL(uri)
     }
 
     _renderNode(node, index, parent, type) {
