@@ -20,9 +20,9 @@ import { ARTICLE_KEY, ARTICLE_IDS_KEY } from '../common/storage'
 import { COLOR, ROUTE_ID, TITLE } from '../common/const'
 
 const FIRST_MAX_ARTICLES_LEN = 10
-const LOAD_MORE_LEN_ONCE = 5
+const LOAD_MORE_LEN_ONCE = 3
 
-const END_REACHED_THRESHOLD = 30
+const END_REACHED_THRESHOLD = 50
 
 class ArticleList extends Component {
     constructor(props) {

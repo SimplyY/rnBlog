@@ -33,10 +33,10 @@ const storage = new Storage({
                         key: ARTICLE_IDS_KEY,
                         rawData: ids
                     })
-                    resolve(ids)
+                    resolve && resolve(ids)
                 })
                 .catch(err => {
-                    reject(err)
+                    reject && reject(err)
                 })
         },
 
@@ -59,10 +59,10 @@ const storage = new Storage({
                         const article = articles
                         saveArticle(article)
                     }
-                    resolve(articles)
+                    resolve && resolve(articles)
                 })
                 .catch(err => {
-                    reject(err)
+                    reject && reject(err)
                 })
         }
     }

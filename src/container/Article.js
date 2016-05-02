@@ -5,10 +5,14 @@ import React, {
     Text,
     Image,
     ScrollView,
-    Navigator
+    Navigator,
+    Dimensions
 } from 'react-native'
 
-import HtmlRender from 'react-native-html-render'
+import reactMixin from 'react-mixin'
+import TimerMixin from 'react-timer-mixin'
+
+import HtmlRender from '../hackedLibs/react-native-html-render'
 
 import MyToolBar from '../component/MyToolBar'
 
@@ -27,44 +31,49 @@ class Article extends Component {
     }
 
     componentDidMount() {
+        const that = this
         storage.load({
             key: ARTICLE_KEY,
             id: this.props.articleId
         })
         .then(article => {
-            this.setState({ articleHtml: article.html })
+            const LAZY_LOAD_DELAY = 300
+
+            const setTimeout = typeof setTimeout === 'function' ?
+                setTimeout:
+                this.setTimeout
+
+            setTimeout(() => {
+                that.setState({ articleHtml: article.html })
+            }, LAZY_LOAD_DELAY)
         })
     }
 
-    _onLinkPress(url) {
-        if (/^\/user\/\w*/.test(url)) {
-            let authorName = url.replace(/^\/user\//, '')
-            routes.toUser(this, {
-                userName: authorName
-            })
-        }
-
-        if (/^https?:\/\/.*/.test(url)) {
-            window.link(url)
-        }
+    _onLinkPress() {
+        // TODO
     }
-
 
     _renderNode(node, index, parent, type) {
         var name = node.name
-        if (node.type == 'block' && type == 'block') {
-            if (name == 'img') {
-                var uri = node.attribs.src;
-                if (/^\/\/dn-cnode\.qbox\.me\/.*/.test(uri)) {
-                    uri = 'http:' + uri
-                }
+        if (name === 'a') {
+            if (node.attribs.class === 'iconfont article-anchor') {
                 return (
-                    <View
-                        key={index}
-                        style={styles.imgWrapper}>
-                        <Image source={{uri:uri}}
-                               style={styles.img}>
-                        </Image>
+                    <Text key={index}>
+                    </Text>
+                )
+            }
+        }
+
+        if (node.type === 'block' && type === 'block') {
+            if (name === 'img') {
+                const thumbnailQureyStr = '?imageMogr2/thumbnail/440x'
+                const uri = node.attribs.src + thumbnailQureyStr;
+                return (
+                    <View key={index}>
+                        <Image
+                            source={{uri:uri}}
+                            style={styles.img}
+                            />
                     </View>
                 )
             }
@@ -99,8 +108,8 @@ class Article extends Component {
                 <HtmlRender
                     value={this.state.articleHtml}
                     onLinkPress={this._onLinkPress.bind(this)}
-                    renderNode={this._renderNode}
                     stylesheet={styles}
+                    renderNode={this._renderNode}
                     />
             </ScrollView>
         )
@@ -117,10 +126,20 @@ class Article extends Component {
     }
 }
 
+const {height,width} = Dimensions.get('window')
+
 const styles = StyleSheet.create({
     article: {
         padding: 20
-    }
+    },
+
+    img: {
+        width: width - 30,
+        height: height * 2/5,
+        resizeMode: Image.resizeMode.contain,
+    },
 })
 
 export default Article
+
+reactMixin(Article.prototype, TimerMixin)

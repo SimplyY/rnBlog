@@ -9,7 +9,6 @@ db: react-native-storage(local storage wrapper for both react-native and browser
 
 #### Component
 react-native-material-design https://github.com/react-native-material-design/react-native-material-design
-markdown:
 
 icons: react-native-vector-icons https://github.com/oblador/react-native-vector-icons
 
