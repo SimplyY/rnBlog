@@ -31,7 +31,9 @@ const storage = new Storage({
                     ids = ids.map(item => item._id)
                     storage.save({
                         key: ARTICLE_IDS_KEY,
-                        rawData: ids
+                        rawData: ids,
+
+                        expires: 1000 * 3600 
                     })
                     resolve && resolve(ids)
                 })
