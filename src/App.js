@@ -11,9 +11,6 @@ import Article from './container/Article'
 
 import { ROUTE_ID } from './common/const'
 
-import { ToastAndroid } from 'react-native'
-
-
 // dev config
 if (__DEV__) {
     // for chrome devtool network could see ajax
@@ -33,8 +30,7 @@ class App extends Component {
             <Navigator
                 initialRoute={{id: ROUTE_ID.articleList}}
                 renderScene={this.renderScene.bind(this)}
-                configureScene={() => Navigator.SceneConfigs.HorizontalSwipeJump}
-                />
+                configureScene={() => Navigator.SceneConfigs.HorizontalSwipeJump} />
         )
     }
 

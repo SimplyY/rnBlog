@@ -118,7 +118,7 @@ var htmlToElement = function (rawHtml, opts, done) {
 
             if (node.type == 'block' && type == 'block') {
                 if (name == 'img') {
-                    var uri = node.attribs.src;
+                    var uri = node.attribs.src + '?imageMogr2/thumbnail/700x';
                     return (
                         <View
                             key={index}

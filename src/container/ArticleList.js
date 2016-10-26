@@ -172,7 +172,10 @@ class ArticleList extends Component {
                                 </Text>
                             </View>
 
-                            <Icon color={COLOR.deepGrey} name="calendar" style={styles.itemIcon} />
+                            <Icon
+                                color={COLOR.deepGrey}
+                                name="calendar"
+                                style={styles.itemIcon} />
                             <Text style={styles.iconText}>
                                 {articleInfo.date}
                             </Text>
